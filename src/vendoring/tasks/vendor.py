@@ -13,9 +13,9 @@ from vendoring.utils import remove_matching_regex as _remove_matching_regex
 from vendoring.utils import run
 
 
-def download_libraries(requirements: Path, destination: Path) -> None:
+def download_libraries(pip: list[str], requirements: Path, destination: Path) -> None:
     command = [
-        "pip",
+        *pip,
         "install",
         "--platform",
         "any",
@@ -155,7 +155,7 @@ def vendor_libraries(config: Configuration) -> List[str]:
     destination = config.destination
 
     # Download the relevant libraries.
-    download_libraries(config.requirements, destination)
+    download_libraries(config.pip, config.requirements, destination)
 
     # Generate an SBOM document for the requirements.
     if config.sbom_file:

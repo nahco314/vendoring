@@ -29,6 +29,8 @@ class Configuration:
     protected_files: List[str]
     # Location to ``.patch` files to apply after vendoring
     patches_dir: Optional[Path]
+    # pip command used by vendoring
+    pip: Optional[list[str]]
 
     # Additional substitutions, done in addition to import rewriting
     substitute: List[Dict[str, str]]
@@ -66,6 +68,7 @@ class Configuration:
                 "requirements": {"type": "string"},
                 "protected-files": {"type": "array", "items": {"type": "string"}},
                 "patches-dir": {"type": "string"},
+                "pip": {"type": "array", "items": {"type": "string"}},
                 "sbom-file": {"type": "string"},
                 "transformations": {
                     "type": "object",
@@ -126,6 +129,7 @@ class Configuration:
             requirements=Path(dictionary["requirements"]),
             protected_files=dictionary.get("protected-files", []),
             patches_dir=path_or_none("patches-dir"),
+            pip=dictionary.get("pip", ["pip"]),
             sbom_file=path_or_none("sbom-file"),
             substitute=dictionary.get("transformations", {}).get("substitute", {}),
             drop_paths=dictionary.get("transformations", {}).get("drop", []),

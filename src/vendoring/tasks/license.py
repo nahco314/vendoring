@@ -132,9 +132,9 @@ class LicenseExtractor:
             self.use_license_fallback(artifact.name)
 
 
-def download_distributions(location: Path, requirements: Path) -> None:
+def download_distributions(pip: list[str], location: Path, requirements: Path) -> None:
     cmd = [
-        "pip",
+        *pip,
         "download",
         "-r",
         str(requirements),
@@ -150,10 +150,11 @@ def fetch_licenses(config: Configuration) -> None:
     license_directories = config.license_directories
     license_fallback_urls = config.license_fallback_urls
     requirements = config.requirements
+    pip = config.pip
 
     tmp_dir = Path(tempfile.gettempdir(), "vendoring-downloads")
     try:
-        download_distributions(tmp_dir, requirements)
+        download_distributions(pip, tmp_dir, requirements)
 
         license_extractor = LicenseExtractor(
             destination=destination,
